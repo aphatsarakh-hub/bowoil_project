@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Register — BowOil</title>
+    <style>
+        :root{
+            --bg:#f6f8fb;
+            --card:#ffffff;
+            --primary:#0f62fe;
+            --muted:#6b7280;
+            --danger:#ef4444;
+            --success:#10b981;
+            --radius:12px;
+            --max-width:420px;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:32px;
+            color:#0f172a;
+        }
+        .card{
+            width:100%;
+            max-width:var(--max-width);
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:0 6px 30px rgba(15,23,42,0.08);
+            padding:28px;
+        }
+        .brand{
+            display:flex;align-items:center;gap:12px;margin-bottom:8px
+        }
+        .logo{
+            width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#6f3ff5);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px
+        }
+        h1{margin:6px 0 18px;font-size:20px}
+        p.lead{margin:0 0 18px;color:var(--muted);font-size:14px}
+        form{display:grid;gap:12px}
+        label{font-size:13px;color:#0f172a}
+        input[type="text"],input[type="email"],input[type="tel"],input[type="password"]{
+            width:100%;padding:10px 12px;border:1px solid #e6e9ef;border-radius:10px;font-size:14px;background:#fbfdff
+        }
+        .field{display:flex;flex-direction:column;gap:6px}
+        .row{display:flex;gap:12px}
+        .row .field{flex:1}
+        .help{font-size:12px;color:var(--muted)}
+        .error{font-size:12px;color:var(--danger)}
+        .actions{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+        button[type="submit"]{
+            background:var(--primary);color:white;padding:10px 14px;border:none;border-radius:10px;font-weight:600;cursor:pointer
+        }
+        .secondary{background:transparent;border:1px solid #e6e9ef;color:var(--muted);padding:10px 12px;border-radius:10px;cursor:pointer}
+        .pw-toggle{background:transparent;border:none;color:var(--muted);cursor:pointer}
+        .meter{height:8px;border-radius:8px;background:#eef2ff;overflow:hidden}
+        .meter > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ef4444,#f59e0b,#10b981)}
+        .success-msg{display:none;padding:12px;border-radius:8px;background:#f0fdf4;color:var(--success);font-weight:600}
+        @media (max-width:480px){body{padding:18px}.card{padding:20px}}
+    </style>
+</head>
+<body>
+    <main class="card" aria-labelledby="reghead">
+        <div class="brand">
+            <div class="logo" aria-hidden="true">BO</div>
+            <div>
+                <h1 id="reghead">สร้างบัญชีใหม่</h1>
+                <p class="lead">สมัครสมาชิกเพื่อใช้งาน BowOil — ปลอดภัยและรวดเร็ว</p>
+            </div>
+        </div>
+
+        <div id="success" class="success-msg" role="status" aria-live="polite"></div>
+
+        <form id="registerForm" novalidate>
+            <div class="row">
+                <div class="field">
+                    <label for="firstName">ชื่อ</label>
+                    <input id="firstName" name="firstName" type="text" autocomplete="given-name" required aria-required="true" />
+                    <div class="error" id="err-firstName" aria-live="polite"></div>
+                </div>
+                <div class="field">
+                    <label for="lastName">นามสกุล</label>
+                    <input id="lastName" name="lastName" type="text" autocomplete="family-name" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="email">อีเมล</label>
+                <input id="email" name="email" type="email" autocomplete="email" required aria-required="true" />
+                <div class="error" id="err-email" aria-live="polite"></div>
+            </div>
+
+            <div class="field">
+                <label for="phone">เบอร์โทรศัพท์ (ไม่บังคับ)</label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0812345678" />
+                <div class="help">ตัวอย่าง: 0812345678</div>
+            </div>
+
+            <div class="field">
+                <label for="password">รหัสผ่าน</label>
+                <div style="display:flex;gap:8px;align-items:center">
+                    <input id="password" name="password" type="password" autocomplete="new-password" required aria-required="true" />
+                    <button type="button" class="pw-toggle" id="togglePw" aria-pressed="false" aria-label="แสดงรหัสผ่าน">👁️</button>
+                </div>
+                <div class="meter" aria-hidden="true"><i id="pwMeter"></i></div>
+                <div class="help">อย่างน้อย 8 ตัวอักษร, ตัวเลข และตัวอักษรพิเศษเพื่อความปลอดภัย</div>
+                <div class="error" id="err-password" aria-live="polite"></div>
+            </div>
+
+            <div class="field">
+                <label for="confirm">ยืนยันรหัสผ่าน</label>
+                <input id="confirm" name="confirm" type="password" autocomplete="new-password" required aria-required="true" />
+                <div class="error" id="err-confirm" aria-live="polite"></div>
+            </div>
+
+            <div class="actions">
+                <button type="submit">สมัครสมาชิก</button>
+                <button type="button" class="secondary" id="cancel">ยกเลิก</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        (function(){
+            const form = document.getElementById('registerForm');
+            const email = document.getElementById('email');
+            const pw = document.getElementById('password');
+            const confirm = document.getElementById('confirm');
+            const firstName = document.getElementById('firstName');
+            const success = document.getElementById('success');
+            const meter = document.getElementById('pwMeter');
+            const toggle = document.getElementById('togglePw');
+
+            function setError(elId,msg){
+                const node = document.getElementById('err-'+elId);
+                if(node) node.textContent = msg || '';
+            }
+
+            function validateEmail(v){
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+            }
+
+            function passwordScore(p){
+                let score = 0;
+                if(p.length >= 8) score += 1;
+                if(/[0-9]/.test(p)) score += 1;
+                if(/[a-z]/.test(p) && /[A-Z]/.test(p)) score += 1;
+                if(/[^A-Za-z0-9]/.test(p)) score += 1;
+                return score; // 0..4
+            }
+
+            function updateMeter(){
+                const s = passwordScore(pw.value);
+                const pct = (s/4)*100;
+                meter.style.width = pct + '%';
+            }
+
+            toggle.addEventListener('click', ()=>{
+                const showing = pw.type === 'text';
+                pw.type = showing ? 'password' : 'text';
+                confirm.type = showing ? 'password' : 'text';
+                toggle.setAttribute('aria-pressed', String(!showing));
+            });
+
+            pw.addEventListener('input', ()=>{
+                updateMeter();
+                setError('password', '');
+            });
+
+            email.addEventListener('input', ()=> setError('email',''));
+            firstName.addEventListener('input', ()=> setError('firstName',''));
+
+            form.addEventListener('submit', (e)=>{
+                e.preventDefault();
+                let valid = true;
+                // first name
+                if(!firstName.value.trim()){ setError('firstName','กรุณากรอกชื่อ'); valid=false }
+                // email
+                if(!validateEmail(email.value.trim())){ setError('email','อีเมลไม่ถูกต้อง'); valid=false }
+                // password
+                const p = pw.value || '';
+                const score = passwordScore(p);
+                if(score < 3){ setError('password','รหัสผ่านควรมีความยาวและความหลากหลาย (ตัวพิมพ์ใหญ่/เล็ก/ตัวเลข/สัญลักษณ์)'); valid=false }
+                // confirm
+                if(p !== confirm.value){ setError('confirm','รหัสผ่านไม่ตรงกัน'); valid=false }
+
+                if(!valid) return;
+
+                // Simulate success — here you would send to server
+                success.textContent = 'สมัครสมาชิกสำเร็จ! ยืนยันอีเมลเพื่อใช้งานต่อ';
+                success.style.display = 'block';
+                form.reset();
+                meter.style.width = '0%';
+                // clear errors
+                setError('firstName',''); setError('email',''); setError('password',''); setError('confirm','');
+            });
+
+            document.getElementById('cancel').addEventListener('click', ()=>{
+                form.reset();
+                meter.style.width = '0%';
+                setError('firstName',''); setError('email',''); setError('password',''); setError('confirm','');
+                success.style.display = 'none';
+            });
+        })();
+    </script>
+</body>
+</html>
