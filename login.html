@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ</title>
+    <style>
+        :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8}
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;font-family:Inter,system-ui,Segoe UI,Roboto, 'Noto Sans Thai', sans-serif;
+            background:linear-gradient(135deg,#071029 0%, #08324a 50%, #05263a 100%);
+            display:flex;align-items:center;justify-content:center;padding:24px;color:#e6eef6
+        }
+        .container{width:100%;max-width:420px}
+        .card{
+            background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(6px);
+            padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6)
+        }
+        .brand{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+        .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#0ea5a4);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042028}
+        h1{font-size:20px;margin:0}
+        p.sub{color:var(--muted);margin:6px 0 20px;font-size:13px}
+        form{display:grid;gap:12px}
+        label{font-size:13px;color:#cfe9f2}
+        .input{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);padding:10px 12px;border-radius:8px}
+        .input input{background:transparent;border:0;outline:none;color:inherit;font-size:14px;width:100%}
+        .row{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+        .btn{background:linear-gradient(90deg,var(--accent),#38bdf8);border:0;color:#042028;padding:10px 14px;border-radius:8px;font-weight:600;cursor:pointer}
+        .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#d8f0fb}
+        .helper{color:#ffb4b4;font-size:13px;min-height:18px}
+        .meta{display:flex;gap:8px;align-items:center}
+        .checkbox{display:flex;gap:8px;align-items:center}
+        .socials{display:flex;gap:8px;margin-top:6px}
+        .socials button{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;cursor:pointer}
+        .footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+        @media (max-width:420px){.card{padding:20px}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" role="main">
+            <div class="brand">
+                <div class="logo">BO</div>
+                <div>
+                    <h1>เข้าสู่ระบบ BowOil</h1>
+                    <p class="sub">กรุณาใส่อีเมลและรหัสผ่านของคุณเพื่อเข้าสู่ระบบ</p>
+                </div>
+            </div>
+
+            <form id="loginForm" novalidate>
+                <div>
+                    <label for="email">อีเมล</label>
+                    <div class="input">
+                        <input id="email" name="email" type="email" placeholder="you@domain.com" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password">รหัสผ่าน</label>
+                    <div class="input">
+                        <input id="password" name="password" type="password" placeholder="รหัสผ่านของคุณ" required minlength="6">
+                        <button type="button" id="togglePwd" title="Show/Hide" class="btn secondary" style="padding:6px 8px;font-size:12px">แสดง</button>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:4px">
+                    <div class="checkbox">
+                        <input id="remember" name="remember" type="checkbox">
+                        <label for="remember" style="font-size:13px;color:var(--muted);margin:0">จดจำฉัน</label>
+                    </div>
+                    <a href="#" style="color:var(--accent);text-decoration:none;font-size:13px">ลืมรหัสผ่าน?</a>
+                </div>
+
+                <div>
+                    <div class="helper" id="helper"></div>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-top:6px">
+                    <button type="submit" class="btn" style="flex:1">เข้าสู่ระบบ</button>
+                    <button type="button" id="guest" class="btn secondary">ผู้เยี่ยมชม</button>
+                </div>
+
+                <div class="socials" aria-hidden="false">
+                    <button type="button">Google</button>
+                    <button type="button">Facebook</button>
+                </div>
+            </form>
+
+            <div class="footer">ยังไม่มีบัญชี? <a href="#" style="color:var(--accent);text-decoration:none">สมัครสมาชิก</a></div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            const form = document.getElementById('loginForm');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const helper = document.getElementById('helper');
+            const toggle = document.getElementById('togglePwd');
+            const guest = document.getElementById('guest');
+
+            toggle.addEventListener('click', ()=>{
+                const showing = password.type === 'text';
+                password.type = showing ? 'password' : 'text';
+                toggle.textContent = showing ? 'แสดง' : 'ซ่อน';
+            });
+
+            guest.addEventListener('click', ()=>{
+                helper.style.color = '#cfe9f2';
+                helper.textContent = 'เข้าสู่ระบบแบบผู้เยี่ยมชม...';
+                setTimeout(()=>{ alert('เข้าสู่ระบบแบบผู้เยี่ยมชมสำเร็จ (จำลอง)'); }, 400);
+            });
+
+            form.addEventListener('submit', (e)=>{
+                e.preventDefault();
+                helper.textContent = '';
+                // basic client-side validation
+                if(!email.value){ helper.style.color = '#ffb4b4'; helper.textContent = 'กรุณากรอกอีเมล'; email.focus(); return }
+                if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)){ helper.style.color = '#ffb4b4'; helper.textContent = 'รูปแบบอีเมลไม่ถูกต้อง'; email.focus(); return }
+                if(!password.value || password.value.length < 6){ helper.style.color = '#ffb4b4'; helper.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; password.focus(); return }
+
+                helper.style.color = '#bff0ea';
+                helper.textContent = 'กำลังเข้าสู่ระบบ...';
+
+                // Simulate network request (replace with real fetch to your server)
+                setTimeout(()=>{
+                    // Dummy success
+                    helper.style.color = '#bff0ea';
+                    helper.textContent = 'เข้าสู่ระบบสำเร็จ — กำลังเปลี่ยนเส้นทาง...';
+                    // In real app, redirect on success
+                    // location.href = '/dashboard.html';
+                }, 900);
+            });
+        })();
+    </script>
+</body>
+</html>
